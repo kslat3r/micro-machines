@@ -1,0 +1,8 @@
+HTML5 Micro Machines
+--
+
+An HTML5 conversion of the original Micro Machines Megadrive game which is available as abandonware.
+
+Uses the HTML5 canvas element and JavaScript canvas rendering.
+
+Note:- please excuse the current iteration of the AI, it tends to behave very strangely.
