@@ -7,7 +7,7 @@ cars_ref['Red sport']		= 3;
 var cars = [
 	{
 		name: 'Yellow sport',
-		loc: '/assets/images/cars/yellow_sport.png',
+		loc: './assets/images/cars/yellow_sport.png',
 		height: 14,
 		width: 25,
 		max_power: 5,
@@ -18,7 +18,7 @@ var cars = [
 	},
 	{
 		name: 'Green sport',
-		loc: '/assets/images/cars/green_sport.png',
+		loc: './assets/images/cars/green_sport.png',
 		height: 14,
 		width: 25,
 		max_power: 5,
