@@ -9,7 +9,7 @@ tracks_ref['Picnic']	= 5;
 var tracks = [
 	{
 		name: 'Sand',
-		loc: '/assets/images/tracks/sand.png',
+		loc: './assets/images/tracks/sand.png',
 		height: 1760,
 		width: 1728,
 		start_positions: [
@@ -75,7 +75,7 @@ var tracks = [
 	},
 	{
 		name: 'Beach',
-		loc: '/assets/images/tracks/beach.png',
+		loc: './assets/images/tracks/beach.png',
 		height: 1760,
 		width: 1600,
 		start_positions: [],
@@ -84,7 +84,7 @@ var tracks = [
 	},
 	{
 		name: 'Breakfast',
-		loc: '/assets/images/tracks/breakfast.png',
+		loc: './assets/images/tracks/breakfast.png',
 		height: 2048,
 		width: 2623,
 		start_positions: [],
@@ -93,7 +93,7 @@ var tracks = [
 	},
 	{
 		name: 'Dinner',
-		loc: '/assets/images/tracks/dinner.png',
+		loc: './assets/images/tracks/dinner.png',
 		height: 2432,
 		width: 2405,
 		start_positions: [],
@@ -102,7 +102,7 @@ var tracks = [
 	},
 	{
 		name: 'DIY',
-		loc: '/assets/images/tracks/diy.png',
+		loc: './assets/images/tracks/diy.png',
 		height: 1824,
 		width: 1440,
 		start_positions: [],
@@ -111,7 +111,7 @@ var tracks = [
 	},
 	{
 		name: 'Picnic',
-		loc: '/assets/images/tracks/picnic.png',
+		loc: './assets/images/tracks/picnic.png',
 		height: 1472,
 		width: 2144,
 		start_positions: [],
