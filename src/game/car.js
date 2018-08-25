@@ -27,7 +27,7 @@ class Car {
     this.steering = 0;
   }
 
-  respondToEvents (game, keysDown) {
+  respondToEvents (game, keysDown = {}) {
     // steer left?
 
     if (keysDown.left) {
@@ -115,11 +115,6 @@ class Car {
     // turn quicker when going faster
 
     this.steering = (this.handling * (Math.abs(this.power) / this.maxPower));
-
-    // add velocity
-
-    this.x -= this.vx;
-    this.y -= this.vy;
   }
 
   draw (game, x, y) {

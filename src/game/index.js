@@ -8,10 +8,6 @@ const Viewport = require('../lib/viewport');
 
 class Game {
   constructor () {
-    this.drawGrid = false;
-    this.clickedStrs = false;
-    this.drawTangents = true;
-
     this.tickInterval = 60;
     this.cellWidth = 10;
     this.cellHeight = 10;
@@ -130,18 +126,6 @@ class Game {
     // draw viewport
 
     this.viewport.draw(this);
-
-    // draw grid
-
-    if (this.drawGrid) {
-      this.viewport.drawGrid(this);
-    }
-
-    // draw tangents?
-
-    if (this.drawTangents) {
-      this.objects[0].drawTangents(this);
-    }
   }
 
   start () {
@@ -165,7 +149,7 @@ class Game {
       x: track.startPositions[1].x,
       y: track.startPositions[1].y,
       angle: track.startAngle,
-      tangents: track.tangents
+      recordedPositions: track.recordedPositions[0]
     })));
 
     // create viewport object
