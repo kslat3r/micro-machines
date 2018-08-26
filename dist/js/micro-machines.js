@@ -1,212 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-const Car = require('./car');
-
-class AICar extends Car {
-  constructor (opts) {
-    super(opts);
-
-    this.recordedPositions = opts.recordedPositions;
-    this.recordedPositionIndex = 0;
-  }
-
-  draw (game) {
-    const recordedPosition = this.recordedPositions[this.recordedPositionIndex];
-
-    this.x = (recordedPosition.x - (game.viewport.width / 2)) * -1;
-    this.y = (recordedPosition.y - (game.viewport.height / 2)) * -1;
-    this.angle = recordedPosition.angle;
-
-    // draw
-
-    super.draw(game, this.x + game.viewport.x, this.y + game.viewport.y);
-
-    // increment position
-
-    if (this.recordedPositionIndex === (this.recordedPositions.length - 1)) {
-      this.recordedPositionIndex = 10;
-    } else {
-      this.recordedPositionIndex++;
-    }
-  }
-}
-
-module.exports = AICar;
-
-},{"./car":2}],2:[function(require,module,exports){
-/* global Image */
-
-class Car {
-  constructor (opts) {
-    this.name = opts.name;
-
-    this.height = opts.height;
-    this.width = opts.width;
-
-    this.acceleration = opts.acceleration;
-    this.braking = opts.braking;
-    this.handling = opts.handling;
-    this.maxPower = opts.maxPower;
-    this.handbrake = opts.handbrake;
-
-    this.img = new Image();
-    this.img.src = opts.imageLocation;
-
-    this.x = opts.x;
-    this.y = opts.y;
-    this.prevX = 0;
-    this.prevY = 0;
-    this.angle = opts.angle;
-    this.vx = 0;
-    this.vy = 0;
-    this.power = 0;
-    this.steering = 0;
-  }
-
-  respondToEvents (game, keysDown = {}) {
-    // steer left?
-
-    if (keysDown.left) {
-      this.angle -= this.steering;
-    }
-
-    // steer right?
-
-    if (keysDown.right) {
-      this.angle += this.steering;
-    }
-
-    // accelerate?
-
-    if (keysDown.accelerate && !keysDown.brake) {
-      if (this.power < this.maxPower) {
-        this.power += this.acceleration;
-      }
-    }
-
-    // decelerate?
-
-    if ((keysDown.accelerate && keysDown.brake) || (!keysDown.accelerate && !keysDown.brake)) {
-      this.power *= game.friction;
-    }
-
-    // brake/reverse?
-
-    if (keysDown.brake && !keysDown.accelerate) {
-      if (this.power > (this.maxPower * -1)) {
-        this.power -= this.braking;
-      }
-    }
-
-    // handbrake
-
-    if (keysDown.handbrake && !keysDown.left && !keysDown.right) {
-      if (this.power > 0) {
-        this.power -= this.handbrake;
-      }
-
-      // handbrake is not reverse
-
-      if (this.power < 0) {
-        this.power = 0;
-      }
-    }
-
-    // decrease angle if i'm sliding left
-
-    if (keysDown.handbrake && keysDown.left) {
-      this.angle -= this.steering * 0.5;
-    }
-
-    // increase angle if i'm sliding right
-
-    if (keysDown.handbrake && keysDown.right) {
-      this.angle += this.steering * 0.5;
-    }
-  }
-
-  calculate (game) {
-    // record prev x/y
-
-    this.prevX = this.x;
-    this.prevY = this.y;
-
-    // get dx/dy
-
-    const dx = Math.cos(this.angle * (Math.PI / 180));
-    const dy = Math.sin(this.angle * (Math.PI / 180));
-
-    // add power to velocity to get new point
-
-    this.vx += dx * this.power;
-    this.vy += dy * this.power;
-
-    // apply friction with grip
-
-    const grip = Math.abs(Math.atan2(this.y - this.vy, this.x - this.vx)) * 0.01;
-
-    this.vx *= game.friction - grip;
-    this.vy *= game.friction - grip;
-
-    // turn quicker when going faster
-
-    this.steering = (this.handling * (Math.abs(this.power) / this.maxPower));
-  }
-
-  draw (game, x, y) {
-    // save state
-
-    game.canvas.context.save();
-
-    // translate to centre & perform rotation
-
-    game.canvas.context.translate(x, y);
-    game.canvas.context.rotate(this.angle * (Math.PI / 180));
-
-    // draw on middle of canvas
-
-    game.canvas.context.drawImage(this.img, 0 - (this.width / 2), 0 - (this.height / 2));
-
-    // restore state
-
-    game.canvas.context.restore();
-  }
-}
-
-module.exports = Car;
-
-},{}],3:[function(require,module,exports){
-module.exports = {
-  yellowSport: {
-    name: 'Yellow sport',
-    imageLocation: './images/cars/yellow_sport.png',
-    height: 14,
-    width: 25,
-    maxPower: 5,
-    acceleration: 1,
-    braking: 0.25,
-    handling: 10,
-    handbrake: 2
-  },
-  greenSport: {
-    name: 'Green sport',
-    imageLocation: './images/cars/green_sport.png',
-    height: 14,
-    width: 25,
-    maxPower: 5,
-    acceleration: 1,
-    braking: 0.25,
-    handling: 10,
-    handbrake: 2
-  }
-};
-
-},{}],4:[function(require,module,exports){
 const tracks = require('./tracks');
-const cars = require('./cars');
 const Canvas = require('../lib/canvas');
 const Track = require('./track');
-const PlayerCar = require('./player-car');
-const AICar = require('./ai-car');
 const Viewport = require('../lib/viewport');
 
 class Game {
@@ -342,19 +137,6 @@ class Game {
 
     this.objects.push(track);
 
-    this.objects.push(new PlayerCar(Object.assign({}, cars.yellowSport, {
-      x: track.startPositions[0].x,
-      y: track.startPositions[0].y,
-      angle: track.startAngle
-    })));
-
-    this.objects.push(new AICar(Object.assign({}, cars.greenSport, {
-      x: track.startPositions[1].x,
-      y: track.startPositions[1].y,
-      angle: track.startAngle,
-      recordedPositions: track.recordedPositions[0]
-    })));
-
     // create viewport object
 
     this.viewport = new Viewport({
@@ -377,28 +159,7 @@ class Game {
 
 module.exports = Game;
 
-},{"../lib/canvas":8,"../lib/viewport":9,"./ai-car":1,"./cars":3,"./player-car":5,"./track":6,"./tracks":7}],5:[function(require,module,exports){
-const Car = require('./car');
-
-class PlayerCar extends Car {
-  draw (game) {
-    super.respondToEvents(game, game.keysDown);
-    super.calculate(game);
-
-    // add velocity
-
-    this.x -= this.vx;
-    this.y -= this.vy;
-
-    // draw
-
-    super.draw(game, game.viewport.centre.x, game.viewport.centre.y);
-  }
-}
-
-module.exports = PlayerCar;
-
-},{"./car":2}],6:[function(require,module,exports){
+},{"../lib/canvas":4,"../lib/viewport":5,"./track":2,"./tracks":3}],2:[function(require,module,exports){
 /* global Image */
 
 class Track {
@@ -426,7 +187,7 @@ class Track {
 
 module.exports = Track;
 
-},{}],7:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 module.exports = {
   sand: {
     name: 'Sand',
@@ -1902,7 +1663,7 @@ module.exports = {
   }
 };
 
-},{}],8:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 class Canvas {
   constructor (elem) {
     this.elem = elem;
@@ -1919,9 +1680,7 @@ class Canvas {
 
 module.exports = Canvas;
 
-},{}],9:[function(require,module,exports){
-const PlayerCar = require('../game/player-car');
-
+},{}],5:[function(require,module,exports){
 class Viewport {
   constructor (opts) {
     this.x = 0;
@@ -1938,26 +1697,17 @@ class Viewport {
   }
 
   draw (game) {
-    // get player car
 
-    const playerCar = game.objects.find(obj => obj instanceof PlayerCar);
-
-    // centre
-
-    if (playerCar) {
-      this.x = playerCar.x;
-      this.y = playerCar.y;
-    }
   }
 }
 
 module.exports = Viewport;
 
-},{"../game/player-car":5}],10:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 const Game = require('./game');
 
 document.addEventListener('DOMContentLoaded', () => {
   new Game().start();
 });
 
-},{"./game":4}]},{},[10]);
+},{"./game":1}]},{},[6]);
