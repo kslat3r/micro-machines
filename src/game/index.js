@@ -1,9 +1,4 @@
-const tracks = require('./tracks');
-const cars = require('./cars');
 const Canvas = require('../lib/canvas');
-const Track = require('./track');
-const PlayerCar = require('./player-car');
-const AICar = require('./ai-car');
 const Viewport = require('../lib/viewport');
 
 class Game {
@@ -132,25 +127,6 @@ class Game {
     // create canvas object
 
     this.canvas = new Canvas(document.getElementById('canvas'));
-
-    // add objects
-
-    const track = new Track(tracks.sand);
-
-    this.objects.push(track);
-
-    this.objects.push(new PlayerCar(Object.assign({}, cars.yellowSport, {
-      x: track.startPositions[0].x,
-      y: track.startPositions[0].y,
-      angle: track.startAngle
-    })));
-
-    this.objects.push(new AICar(Object.assign({}, cars.greenSport, {
-      x: track.startPositions[1].x,
-      y: track.startPositions[1].y,
-      angle: track.startAngle,
-      recordedPositions: track.recordedPositions[0]
-    })));
 
     // create viewport object
 

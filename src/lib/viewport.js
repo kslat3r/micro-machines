@@ -1,5 +1,3 @@
-const PlayerCar = require('../game/player-car');
-
 class Viewport {
   constructor (opts) {
     this.x = 0;
@@ -15,17 +13,8 @@ class Viewport {
     };
   }
 
-  draw (game) {
-    // get player car
+  draw () {
 
-    const playerCar = game.objects.find(obj => obj instanceof PlayerCar);
-
-    // centre
-
-    if (playerCar) {
-      this.x = playerCar.x;
-      this.y = playerCar.y;
-    }
   }
 }
 
