@@ -1,38 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-const Car = require('./car');
-
-class AICar extends Car {
-  constructor (opts) {
-    super(opts);
-
-    this.recordedPositions = opts.recordedPositions;
-    this.recordedPositionIndex = 0;
-  }
-
-  draw (game) {
-    const recordedPosition = this.recordedPositions[this.recordedPositionIndex];
-
-    this.x = (recordedPosition.x - (game.viewport.width / 2)) * -1;
-    this.y = (recordedPosition.y - (game.viewport.height / 2)) * -1;
-    this.angle = recordedPosition.angle;
-
-    // draw
-
-    super.draw(game, this.x + game.viewport.x, this.y + game.viewport.y);
-
-    // increment position
-
-    if (this.recordedPositionIndex === (this.recordedPositions.length - 1)) {
-      this.recordedPositionIndex = 10;
-    } else {
-      this.recordedPositionIndex++;
-    }
-  }
-}
-
-module.exports = AICar;
-
-},{"./car":2}],2:[function(require,module,exports){
 /* global Image */
 
 class Car {
@@ -174,7 +140,7 @@ class Car {
 
 module.exports = Car;
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 module.exports = {
   yellowSport: {
     name: 'Yellow sport',
@@ -200,13 +166,12 @@ module.exports = {
   }
 };
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 const tracks = require('./tracks');
 const cars = require('./cars');
 const Canvas = require('../lib/canvas');
 const Track = require('./track');
 const PlayerCar = require('./player-car');
-const AICar = require('./ai-car');
 const Viewport = require('../lib/viewport');
 
 class Game {
@@ -348,13 +313,6 @@ class Game {
       angle: track.startAngle
     })));
 
-    this.objects.push(new AICar(Object.assign({}, cars.greenSport, {
-      x: track.startPositions[1].x,
-      y: track.startPositions[1].y,
-      angle: track.startAngle,
-      recordedPositions: track.recordedPositions[0]
-    })));
-
     // create viewport object
 
     this.viewport = new Viewport({
@@ -377,7 +335,7 @@ class Game {
 
 module.exports = Game;
 
-},{"../lib/canvas":8,"../lib/viewport":9,"./ai-car":1,"./cars":3,"./player-car":5,"./track":6,"./tracks":7}],5:[function(require,module,exports){
+},{"../lib/canvas":7,"../lib/viewport":8,"./cars":2,"./player-car":4,"./track":5,"./tracks":6}],4:[function(require,module,exports){
 const Car = require('./car');
 
 class PlayerCar extends Car {
@@ -398,7 +356,7 @@ class PlayerCar extends Car {
 
 module.exports = PlayerCar;
 
-},{"./car":2}],6:[function(require,module,exports){
+},{"./car":1}],5:[function(require,module,exports){
 /* global Image */
 
 class Track {
@@ -426,7 +384,7 @@ class Track {
 
 module.exports = Track;
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 module.exports = {
   sand: {
     name: 'Sand',
@@ -1902,7 +1860,7 @@ module.exports = {
   }
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 class Canvas {
   constructor (elem) {
     this.elem = elem;
@@ -1919,7 +1877,7 @@ class Canvas {
 
 module.exports = Canvas;
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 const PlayerCar = require('../game/player-car');
 
 class Viewport {
@@ -1953,11 +1911,11 @@ class Viewport {
 
 module.exports = Viewport;
 
-},{"../game/player-car":5}],10:[function(require,module,exports){
+},{"../game/player-car":4}],9:[function(require,module,exports){
 const Game = require('./game');
 
 document.addEventListener('DOMContentLoaded', () => {
   new Game().start();
 });
 
-},{"./game":4}]},{},[10]);
+},{"./game":3}]},{},[9]);
